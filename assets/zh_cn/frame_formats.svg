@@ -1,0 +1,42 @@
+<svg viewBox="0 0 680 330" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, sans-serif">
+  <rect width="680" height="330" fill="#ffffff"/>
+  <text x="340" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">同一个 Frame 的三种"长相"（示例：0xAAC1A4）</text>
+
+  <defs>
+    <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#888"/>
+    </marker>
+  </defs>
+
+  <!-- Row 1: waveform -->
+  <rect x="40" y="45" width="600" height="60" rx="8" fill="#eef2f7" stroke="#4a76c9"/>
+  <text x="60" y="66" font-size="12" font-weight="bold" fill="#1a3a6b">① 空中波形</text>
+  <polyline points="170,95 170,58 200,58 200,95 260,95 260,58 290,58 290,95 320,95 320,58 335,58 335,95 395,95 395,58 425,58 425,95 455,95 455,58 470,58 470,95 530,95 530,58 560,58 560,95 590,95 590,58 605,58 605,95" fill="none" stroke="#2a6fd6" stroke-width="2.5"/>
+
+  <line x1="340" y1="107" x2="340" y2="127" stroke="#888" stroke-width="1.5" marker-end="url(#arr2)"/>
+  <text x="352" y="122" font-size="10" fill="#666">量出每个脉冲的宽窄，按比例翻译成 0 和 1</text>
+
+  <!-- Row 2: binary -->
+  <rect x="40" y="130" width="600" height="60" rx="8" fill="#eef2f7" stroke="#4a76c9"/>
+  <text x="60" y="151" font-size="12" font-weight="bold" fill="#1a3a6b">② 二进制（24 位）</text>
+  <text x="90" y="178" font-size="13" font-family="monospace" fill="#1a3a6b">1010 1010 1100 0001 1010</text>
+  <text x="410" y="178" font-size="13" font-family="monospace" fill="#8a2a2a">0100</text>
+
+  <line x1="340" y1="192" x2="340" y2="212" stroke="#888" stroke-width="1.5" marker-end="url(#arr2)"/>
+  <text x="352" y="207" font-size="10" fill="#666">每 4 位二进制 = 1 个十六进制数字</text>
+
+  <!-- Row 3: hex -->
+  <rect x="40" y="215" width="600" height="60" rx="8" fill="#eef2f7" stroke="#4a76c9"/>
+  <text x="60" y="236" font-size="12" font-weight="bold" fill="#1a3a6b">③ 十六进制（最常见写法）</text>
+  <text x="150" y="262" font-size="15" font-family="monospace" font-weight="bold" fill="#1a1a1a">0x</text>
+  <rect x="175" y="242" width="200" height="26" rx="4" fill="#dde8f5" stroke="#4a76c9"/>
+  <text x="275" y="262" text-anchor="middle" font-size="14" font-family="monospace" fill="#1a3a6b">AAC1A</text>
+  <rect x="378" y="242" width="50" height="26" rx="4" fill="#fdeeee" stroke="#c94a4a"/>
+  <text x="403" y="262" text-anchor="middle" font-size="14" font-family="monospace" fill="#8a2a2a">4</text>
+
+  <!-- bottom legend -->
+  <rect x="175" y="290" width="14" height="14" fill="#dde8f5" stroke="#4a76c9"/>
+  <text x="196" y="302" font-size="11" fill="#1a3a6b">高 20 位 = 地址码（0xAAC1A）</text>
+  <rect x="378" y="290" width="14" height="14" fill="#fdeeee" stroke="#c94a4a"/>
+  <text x="399" y="302" font-size="11" fill="#8a2a2a">低 4 位 = 按键号（0x4）</text>
+</svg>

@@ -1,0 +1,34 @@
+<svg viewBox="0 -8 680 268" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, sans-serif">
+  <rect x="0" y="-8" width="680" height="268" fill="#ffffff"/>
+  <text x="340" y="14" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">EV1527 波形：同步头 + 一串码元（示意图，不按比例）</text>
+
+  <!-- baseline -->
+  <line x1="30" y1="190" x2="650" y2="190" stroke="#333" stroke-width="1"/>
+
+  <!-- SYNC: high 1T, low 31T -->
+  <polyline points="40,190 40,80 62,80 62,190 222,190" fill="none" stroke="#2a6fd6" stroke-width="3"/>
+  <text x="131" y="62" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a3a6b">同步头（SYNC）</text>
+  <text x="51" y="70" text-anchor="middle" font-size="10" fill="#4a5a7a">高 1T</text>
+  <text x="142" y="210" text-anchor="middle" font-size="10" fill="#4a5a7a">低 31T（示意）</text>
+
+  <!-- bit 1: high 3T, low 1T -->
+  <polyline points="222,190 222,80 312,80 312,190 342,190" fill="none" stroke="#c94a4a" stroke-width="3"/>
+  <text x="282" y="48" text-anchor="middle" font-size="12" font-weight="bold" fill="#8a2a2a">码元 "1"</text>
+  <text x="267" y="70" text-anchor="middle" font-size="10" fill="#a05a5a">高 3T</text>
+  <text x="327" y="210" text-anchor="middle" font-size="10" fill="#a05a5a">低 1T</text>
+
+  <!-- bit 0: high 1T, low 3T -->
+  <polyline points="342,190 342,80 372,80 372,190 462,190" fill="none" stroke="#3a8a4a" stroke-width="3"/>
+  <text x="422" y="48" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d5a2a">码元 "0"</text>
+  <text x="357" y="70" text-anchor="middle" font-size="10" fill="#3a6a4a">高 1T</text>
+  <text x="417" y="210" text-anchor="middle" font-size="10" fill="#3a6a4a">低 3T</text>
+
+  <!-- ellipsis + more bits -->
+  <polyline points="462,190 462,80 482,80 482,190 502,190" fill="none" stroke="#c94a4a" stroke-width="3"/>
+  <polyline points="502,190 502,80 532,80 532,190 622,190" fill="none" stroke="#3a8a4a" stroke-width="3"/>
+  <text x="562" y="62" text-anchor="middle" font-size="12" fill="#666">…… 直到凑满 24 位</text>
+
+  <!-- annotations -->
+  <text x="40" y="238" font-size="11" fill="#444">T = 这把遥控器的"基准脉宽"（节拍），不同遥控器快慢不同，接收端靠比例而不是固定时长来识别 0 和 1</text>
+  <text x="40" y="254" font-size="11" fill="#444">同步头用一个特别长的低电平喊出"一帧开始了"，后面紧跟 24 个码元，从高位到低位依次排列</text>
+</svg>

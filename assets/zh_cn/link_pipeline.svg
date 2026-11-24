@@ -1,0 +1,66 @@
+<svg viewBox="0 0 680 320" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, sans-serif">
+  <rect width="680" height="320" fill="#ffffff"/>
+  <text x="340" y="28" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">遥控器按键 → Frame 的完整链路</text>
+
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#888"/>
+    </marker>
+  </defs>
+
+  <!-- Row 1: transmitter side -->
+  <rect x="20" y="50" width="120" height="52" rx="8" fill="#e8f0fe" stroke="#4a76c9"/>
+  <text x="80" y="73" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a3a6b">按键按下</text>
+  <text x="80" y="91" text-anchor="middle" font-size="10" fill="#4a5a7a">遥控器</text>
+
+  <rect x="170" y="50" width="140" height="52" rx="8" fill="#e8f0fe" stroke="#4a76c9"/>
+  <text x="240" y="73" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a3a6b">编码芯片 EV1527</text>
+  <text x="240" y="91" text-anchor="middle" font-size="10" fill="#4a5a7a">20 位地址 + 4 位键值</text>
+
+  <rect x="340" y="50" width="140" height="52" rx="8" fill="#e8f0fe" stroke="#4a76c9"/>
+  <text x="410" y="73" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a3a6b">OOK 调制</text>
+  <text x="410" y="91" text-anchor="middle" font-size="10" fill="#4a5a7a">有波 = 1，无波 = 0</text>
+
+  <rect x="510" y="50" width="150" height="52" rx="8" fill="#e8f0fe" stroke="#4a76c9"/>
+  <text x="585" y="73" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a3a6b">433 MHz 发射</text>
+  <text x="585" y="91" text-anchor="middle" font-size="10" fill="#4a5a7a">中心频率 433.92 MHz</text>
+
+  <line x1="140" y1="76" x2="168" y2="76" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="310" y1="76" x2="338" y2="76" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="480" y1="76" x2="508" y2="76" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- arrow down through air -->
+  <line x1="585" y1="102" x2="585" y2="140" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="575" y="127" text-anchor="end" font-size="10" fill="#a05a2c">空中传播 · 噪声 · 衰减</text>
+
+  <!-- Row 2: receiver side -->
+  <rect x="510" y="145" width="150" height="52" rx="8" fill="#e6f4ea" stroke="#3a8a4a"/>
+  <text x="585" y="168" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d5a2a">接收机解调</text>
+  <text x="585" y="186" text-anchor="middle" font-size="10" fill="#3a6a4a">还原电平波形</text>
+
+  <rect x="340" y="145" width="140" height="52" rx="8" fill="#e6f4ea" stroke="#3a8a4a"/>
+  <text x="410" y="168" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d5a2a">量脉宽 · 找同步头</text>
+  <text x="410" y="186" text-anchor="middle" font-size="10" fill="#3a6a4a">按比例判 0 / 1</text>
+
+  <rect x="170" y="145" width="140" height="52" rx="8" fill="#fff3e0" stroke="#c97a1a"/>
+  <text x="240" y="168" text-anchor="middle" font-size="12" font-weight="bold" fill="#7a4a10">凑满 24 bit</text>
+  <text x="240" y="186" text-anchor="middle" font-size="10" fill="#8a6a3a">= 一个 Frame</text>
+
+  <rect x="20" y="145" width="120" height="52" rx="8" fill="#fff3e0" stroke="#c97a1a"/>
+  <text x="80" y="168" text-anchor="middle" font-size="12" font-weight="bold" fill="#7a4a10">重复多帧 + 投票</text>
+  <text x="80" y="186" text-anchor="middle" font-size="10" fill="#8a6a3a">输出稳定结果</text>
+
+  <line x1="510" y1="171" x2="482" y2="171" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="340" y1="171" x2="312" y2="171" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="170" y1="171" x2="142" y2="171" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- bottom: frame structure -->
+  <line x1="80" y1="197" x2="80" y2="245" stroke="#bbb" stroke-width="1" stroke-dasharray="4 3"/>
+  <rect x="170" y="248" width="350" height="36" rx="4" fill="#eef2f7" stroke="#4a76c9"/>
+  <rect x="520" y="248" width="70" height="36" rx="4" fill="#fdeeee" stroke="#c94a4a"/>
+  <text x="345" y="262" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a3a6b">高 20 位：地址码（这把遥控器的身份证）</text>
+  <text x="345" y="277" text-anchor="middle" font-size="9" fill="#4a5a7a">例 0xAAC1A</text>
+  <text x="555" y="262" text-anchor="middle" font-size="11" font-weight="bold" fill="#8a2a2a">低 4 位</text>
+  <text x="555" y="277" text-anchor="middle" font-size="9" fill="#a05a5a">按键号</text>
+  <text x="170" y="306" font-size="10" fill="#666">一个 Frame = 24 bit，常写作 6 位十六进制，如 0xAAC1A4</text>
+</svg>

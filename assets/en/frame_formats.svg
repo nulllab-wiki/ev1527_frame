@@ -1,0 +1,42 @@
+<svg viewBox="0 0 680 330" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, sans-serif">
+  <rect width="680" height="330" fill="#ffffff"/>
+  <text x="340" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">The same Frame in three forms (example: 0xAAC1A4)</text>
+
+  <defs>
+    <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#888"/>
+    </marker>
+  </defs>
+
+  <!-- Row 1: waveform -->
+  <rect x="40" y="45" width="600" height="60" rx="8" fill="#eef2f7" stroke="#4a76c9"/>
+  <text x="60" y="66" font-size="12" font-weight="bold" fill="#1a3a6b">① The waveform on air</text>
+  <polyline points="225,95 225,58 252,58 252,95 306,95 306,58 333,58 333,95 360,95 360,58 374,58 374,95 427,95 427,58 454,58 454,95 482,95 482,58 495,58 495,95 549,95 549,58 576,58 576,95 603,95 603,58 617,58 617,95" fill="none" stroke="#2a6fd6" stroke-width="2.5"/>
+
+  <line x1="340" y1="107" x2="340" y2="127" stroke="#888" stroke-width="1.5" marker-end="url(#arr2)"/>
+  <text x="352" y="122" font-size="10" fill="#666">measure pulses, decode 0/1 by ratio</text>
+
+  <!-- Row 2: binary -->
+  <rect x="40" y="130" width="600" height="60" rx="8" fill="#eef2f7" stroke="#4a76c9"/>
+  <text x="60" y="151" font-size="12" font-weight="bold" fill="#1a3a6b">② Binary (24 bits)</text>
+  <text x="90" y="178" font-size="13" font-family="monospace" fill="#1a3a6b">1010 1010 1100 0001 1010</text>
+  <text x="410" y="178" font-size="13" font-family="monospace" fill="#8a2a2a">0100</text>
+
+  <line x1="340" y1="192" x2="340" y2="212" stroke="#888" stroke-width="1.5" marker-end="url(#arr2)"/>
+  <text x="352" y="207" font-size="10" fill="#666">every 4 bits = one hex digit</text>
+
+  <!-- Row 3: hex -->
+  <rect x="40" y="215" width="600" height="60" rx="8" fill="#eef2f7" stroke="#4a76c9"/>
+  <text x="60" y="236" font-size="12" font-weight="bold" fill="#1a3a6b">③ Hex (the usual form)</text>
+  <text x="150" y="262" font-size="15" font-family="monospace" font-weight="bold" fill="#1a1a1a">0x</text>
+  <rect x="175" y="242" width="200" height="26" rx="4" fill="#dde8f5" stroke="#4a76c9"/>
+  <text x="275" y="262" text-anchor="middle" font-size="14" font-family="monospace" fill="#1a3a6b">AAC1A</text>
+  <rect x="378" y="242" width="50" height="26" rx="4" fill="#fdeeee" stroke="#c94a4a"/>
+  <text x="403" y="262" text-anchor="middle" font-size="14" font-family="monospace" fill="#8a2a2a">4</text>
+
+  <!-- bottom legend -->
+  <rect x="175" y="290" width="14" height="14" fill="#dde8f5" stroke="#4a76c9"/>
+  <text x="196" y="302" font-size="11" fill="#1a3a6b">High 20 bits = address (0xAAC1A)</text>
+  <rect x="430" y="290" width="14" height="14" fill="#fdeeee" stroke="#c94a4a"/>
+  <text x="451" y="302" font-size="11" fill="#8a2a2a">Low 4 bits = key (0x4)</text>
+</svg>
