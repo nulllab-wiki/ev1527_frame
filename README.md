@@ -136,22 +136,22 @@ This also explains two phenomena you may observe:
 
 ## 8. Glossary
 
-| Term | English | Plain-language explanation |
-|---|---|---|
-| Frame | Frame | The digital encoding of one key press; exactly 24 bits under the EV1527 protocol. In this article it means the **radio-frequency frame (RF Frame)**; data frames used for communication between the module and other devices are a different matter — see each module's protocol documentation |
-| Address code | Address code | The high 20 bits of a frame — the remote's "ID card" (C0–C19 in the official datasheet) |
-| Key value | Key data / Button code | The low 4 bits of a frame — which key was pressed |
-| SYNC | SYNC / Sync pulse / Preamble | One extra-long low level that opens every frame ("a frame starts here"). The official datasheet calls it the preamble, defined as high 1T + low 31T |
-| Base time | Base time / Pulse width | The remote's tempo unit T; it differs between remotes, and bits are decoded by ratio |
-| OOK | OOK (On-Off Keying) | Modulation scheme: carrier on = 1, carrier off = 0; the simplest form of ASK |
-| ASK | ASK (Amplitude Shift Keying) | Modulation by amplitude changes; OOK is its special case |
-| 433 MHz band | 433 MHz band | License-free public band; commonly used center frequency is 433.92 MHz |
-| ISM band | ISM band | License-free band for industrial/scientific/medical use; 433 MHz belongs to it |
-| Fixed code | Fixed code | Encoding whose address is fixed at production and sent in plaintext (EV1527 belongs to this class) |
-| Burst | Repeat / Burst | One key press transmits the same frame many times, to fight the unreliable wireless link |
-| Voting filter | Window filter / Voting | Within a time window, frames are grouped and counted; the majority group wins if it reaches the threshold |
+| Term | Explanation |
+|---|---|
+| Frame | The digital encoding of one key press; exactly 24 bits under the EV1527 protocol. In this article it means the **radio-frequency frame (RF Frame)**; data frames used for communication between the module and other devices are a different matter — see each module's protocol documentation |
+| Address code | The high 20 bits of a frame — the remote's "ID card" (C0–C19 in the official datasheet) |
+| Key data | The low 4 bits of a frame — which key was pressed (also called button code) |
+| SYNC / Preamble | One extra-long low level that opens every frame ("a frame starts here"). The official datasheet calls it the preamble, defined as high 1T + low 31T |
+| Base time (T) | The remote's tempo unit T; it differs between remotes, and bits are decoded by ratio (also called pulse width) |
+| OOK | On-Off Keying — modulation scheme: carrier on = 1, carrier off = 0; the simplest form of ASK |
+| ASK | Amplitude Shift Keying — modulation by amplitude changes; OOK is its special case |
+| 433 MHz band | License-free public band; commonly used center frequency is 433.92 MHz |
+| ISM band | License-free band for industrial/scientific/medical use; 433 MHz belongs to it |
+| Fixed code | Encoding whose address is fixed at production and sent in plaintext (EV1527 belongs to this class) |
+| Burst | One key press transmits the same frame many times (repeat transmission), to fight the unreliable wireless link |
+| Voting filter | Window filter — within a time window, frames are grouped and counted; the majority group wins if it reaches the threshold |
 
-**Writing conventions** (consistent across all nulllab documentation): frequencies are written as "433 MHz band (center frequency 433.92 MHz)", shortened to "433 MHz" afterwards; frames are written as 6 uppercase hexadecimal digits with the `0x` prefix; "Frame" is given with the Chinese equivalent on first use, then used alone.
+**Writing conventions** (consistent across all nulllab documentation): frequencies are written as "433 MHz band (center frequency 433.92 MHz)", shortened to "433 MHz" afterwards; frames are written as 6 uppercase hexadecimal digits with the `0x` prefix; "Frame" is defined on first use and used alone afterwards.
 
 ## 9. FAQ
 
