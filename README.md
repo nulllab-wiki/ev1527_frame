@@ -2,13 +2,13 @@
 
 English | [简体中文](README.zh-CN.md)
 
-**Scope**: This article applies to the RFX1 (433 MHz OOK EV1527) wireless receiver module from nulllab, and to anyone who wants to understand what a "433 remote control" is actually transmitting. It does not depend on any development platform or programming language.
+**Scope**: This article covers the RFX1 (433 MHz OOK EV1527) wireless receiver module from nulllab and is written for anyone who wants to understand what a "433 remote control" is actually transmitting. It does not depend on any development platform or programming language.
 
-**Frame in one sentence**: A Frame is the digital encoding of one key press on a remote control — a 24-bit binary number whose high 20 bits identify the remote (its "ID card", the address code) and whose low 4 bits say which key was pressed (the key value). It usually appears as a 6-digit hexadecimal number, such as `0xAAC1A4`. One key press sends the same frame repeatedly; the receiver module votes over the received frames and outputs a stable result.
+**Frame in one sentence**: A Frame is the digital encoding of one key press on a remote control — a 24-bit binary number whose upper 20 bits identify the remote (its ID — the address code) and whose lower 4 bits say which key was pressed (the key value). It usually appears as a 6-digit hexadecimal number, such as `0xAAC1A4`. One key press sends the same frame repeatedly; the receiver module votes over the received frames and outputs a stable result.
 
 Unless stated otherwise, *Frame* below always means the radio-frequency frame (RF Frame) defined by the EV1527 protocol; the data frames used for communication between the module and other devices are a different thing — see the glossary in section 8. If you only want the answer, this is it.
 
-**About RFX1**: it performs the most complex parts of wireless remote reception — RF reception, SYNC search, pulse-width measurement, bit-by-bit decoding, and multi-frame voting/filtering — entirely inside the module. You do not need to care about any low-level reception details: read the Frame over I2C, get "which remote pressed which key", and start writing your application logic right away. This article explains the principles so that you know what the module has already done for you — so that you don't have to do it again.
+**About RFX1**: it performs the most complex parts of wireless remote reception — RF reception, SYNC search, pulse-width measurement, bit-by-bit decoding, and multi-frame voting/filtering — entirely inside the module. You do not need to care about any low-level reception details: read the Frame over I2C, get "which remote pressed which key", and start writing your application logic right away. This article explains the principles so that you know what the module has already done for you — and so you don't have to do it yourself.
 
 ---
 
@@ -38,9 +38,9 @@ One easily overlooked fact: **the wireless link is one-way**. The remote does no
 
 ## 2. 433 MHz: a shared channel
 
-433 MHz is a **license-free public band** (an ISM band — industrial, scientific and medical). In plain terms: no license is needed, and anyone may transmit in this band, as long as the power is low and others are not interfered with.
+433 MHz is a **license-free public band** (an ISM band — industrial, scientific and medical). In plain terms: no license is needed, and anyone may transmit in this band, as long as transmit power stays low and transmissions do not interfere with other users.
 
-The commonly used center frequency in this band is **433.92 MHz**. Product descriptions may say 433 MHz, 433.92 MHz, or even misspell it as 443 MHz — they all refer to the same thing: the **433 MHz band**.
+The commonly used center frequency in this band is **433.92 MHz**. Product descriptions may say 433 MHz, 433.92 MHz, or even mislabel it as 443 MHz — they all refer to the same thing: the **433 MHz band**.
 
 Because it is license-free, this "public channel" is crowded: remote switches, door sensors, tire-pressure monitors, weather stations… Your receiver may hear other people's remotes, and their receivers may hear yours. Keep this in mind — it explains why the address code matters (section 4).
 
@@ -51,9 +51,9 @@ Because it is license-free, this "public channel" is crowded: remote switches, d
 What travels between the remote and the receiver is not "speech" but a sequence of on/off states. This modulation scheme is called **OOK (On-Off Keying)**, the simplest member of the ASK (Amplitude Shift Keying) family:
 
 - **Transmitting**: to send a "1", turn the 433 MHz carrier on for a short while; to send a "0", turn it off;
-- **Receiving**: the receiver restores this into a single level line — carrier present = high level, carrier absent = low level.
+- **Receiving**: the receiver turns this back into a simple high/low signal — carrier present = high level, carrier absent = low level.
 
-Think of signaling with a flashlight: flash for 1, dark for 0. It is simple, power-efficient and cheap, which is exactly why 433 remote solutions are everywhere. The price is modest noise immunity — any strong signal in the band can turn a "dark" into a "flash".
+Think of signaling with a flashlight: flash for 1, dark for 0. It is simple, power-efficient and cheap, which is exactly why 433 remote solutions are everywhere. The trade-off is limited noise immunity — any strong signal in the band can flip a "dark" into a "flash".
 
 The decoded waveform looks like this (it is also the protagonist of section 4):
 
@@ -61,20 +61,20 @@ The decoded waveform looks like this (it is also the protagonist of section 4):
 
 ## 4. EV1527: packing 24 bits into on/off pulses
 
-**EV1527** is a widely used fixed-code encoding protocol (compatible chips include PT2262-style families — see the FAQ). It defines how to pack 24 bits into the on/off waveform above. Three facts are enough to understand it:
+**EV1527** is a widely used fixed-code encoding protocol (compatible chips include the RT1527/FP1527/SC1527 family — see the FAQ). It defines how to pack 24 bits into the on/off waveform above. Three facts are enough to understand it:
 
 ### 4.1 Frame layout: 20 + 4
 
-Every frame is exactly 24 bits, from the highest bit to the lowest:
+Every frame is exactly 24 bits, from the most significant bit to the least:
 
 | Part | Bits | Meaning | Example |
 |---|---|---|---|
-| Address code | High 20 bits | The remote's "ID card", generated randomly at the factory, unique per remote | `0xAAC1A` |
-| Key value | Low 4 bits | Which key was pressed (A/B/C/D or 1/2/3/4) | `0x4` |
+| Address code | Upper 20 bits | The remote's ID, generated randomly at the factory, unique per remote | `0xAAC1A` |
+| Key value | Lower 4 bits | Which key was pressed (A/B/C/D or 1/2/3/4) | `0x4` |
 
 So the example Frame `0xAAC1A4` means: **"the remote whose ID is 0xAAC1A pressed key number 4."**
 
-To decide "is this my remote?", the receiver compares the 20 address bits; to decide "which key maps to which action?", it looks at the 4 key bits. How to compare and how to map is entirely up to the receiver's program — the Frame only faithfully delivers these two facts.
+To decide "is this my remote?", the receiver compares the 20 address bits; to decide "which key maps to which action?", it looks at the 4 key bits. How to compare and how to map is entirely up to the receiver's program — the Frame simply delivers these two facts.
 
 ### 4.2 SYNC: the whistle that opens a frame
 
@@ -88,7 +88,7 @@ Each symbol consists of one high and one low level, timed against the **base pul
 - Symbol **"1"** = high 3T + low 1T
 - SYNC = high 1T + low 31T
 
-The key point: **T differs between remotes** (commonly somewhere between a hundred-odd microseconds and a few milliseconds). The receiver does not rely on absolute durations but on **ratios** — "the high level is much longer than the low level" means 1, and the other way round means 0. This is why remotes with different speeds can all be decoded by the same module.
+The key point: **T differs between remotes** (typically somewhere between a few hundred microseconds and a few milliseconds). The receiver does not rely on absolute durations but on **ratios** — "the high level is much longer than the low level" means 1, and the other way round means 0. This is why remotes with different speeds can all be decoded by the same module.
 
 ## 5. Three faces of a Frame
 
@@ -99,7 +99,7 @@ The same Frame exists in different forms at different stages. With this figure, 
 Three conventions, followed consistently across all nulllab documentation:
 
 1. **Hexadecimal notation**: 6 digits, uppercase, with the `0x` prefix, e.g. `0xAAC1A4`;
-2. **Leading zeros matter**: `0x01A2B4` and `0x1A2B4` are the same frame. Printers may drop leading zeros when the address is small — be careful with string comparisons;
+2. **Leading zeros matter**: `0x01A2B4` and `0x1A2B4` are the same frame. Serial output may drop leading zeros when the address is small — be careful with string comparisons;
 3. **Layered meaning**: the address code says "who sent it", the key value says "what was pressed". Two remotes can share the same key value but never (normally) the same address, which is how the receiver tells them apart.
 
 ## 6. Why one key press yields several frames
@@ -115,9 +115,9 @@ The common answer is **voting**: within a time window, group the received frames
 This also explains two phenomena you may observe:
 
 - **One key press prints several identical Frames** — normal: those are retransmissions of the same frame, and the module deduplicates them by voting (if filtering is enabled);
-- **Occasionally a "strange" Frame shows up** — it may be a neighbor's remote bleeding into the band (remember section 2?), or a frame that survived with corrupted bits. The window-voting mechanism exists precisely to keep such "one-off frames" out.
+- **Occasionally a "strange" Frame shows up** — it may be a neighbor's remote bleeding into the band (remember section 2?), or a frame that made it through with some bits corrupted. The window-voting mechanism exists precisely to keep such "one-off frames" out.
 
-**Be realistic about accuracy: reception and decoding results are not 100% correct.** The wireless link is unreliable by nature; signal quality, environmental interference, distance and obstacles, co-band devices, and the inherent limits of the protocol and the decoding mechanism can all cause lost frames, bit errors, or in extreme cases misjudgments. Window voting greatly reduces these risks but cannot eliminate them. Verify thoroughly in the real deployment environment when designing your application logic; for reliability-critical scenarios, keep human review or other supporting checks in the loop, and never treat a single received frame as the sole source of truth.
+**Be realistic about accuracy: reception and decoding results are not 100% correct.** The wireless link is unreliable by nature; signal quality, environmental interference, distance and obstacles, co-band devices, and the inherent limits of the protocol and the decoding mechanism can all cause lost frames, bit errors, or in extreme cases misjudgments. Window voting greatly reduces these risks but cannot eliminate them. Verify thoroughly in the real deployment environment when designing your application logic; for reliability-critical applications, keep human review or other supporting checks in the loop, and never treat a single received frame as the sole source of truth.
 
 **"Raw" vs "filtered" frames**: some receiver modules provide both results — raw frames (whatever was heard, good for debugging and code sniffing) and filtered frames (the stable voting result, good for application logic). Which one to use depends on whether you want to "see everything" or "get a trustworthy answer". For the specific API, refer to the module's documentation.
 
@@ -130,7 +130,7 @@ This also explains two phenomena you may observe:
 | 3 | "Receiving one frame is reliable" | A single frame can be corrupted in the air. Reliability comes from **repeat + voting**, not from any single frame |
 | 4 | "EV1527 is encrypted and secure" | EV1527 is a **fixed-code, plaintext** protocol; any receiver in the band sees the same Frame. For anti-replay and anti-cloning, choose rolling-code schemes |
 | 5 | "OOK, EV1527 and 433 MHz are the same thing" | They live on different layers: **OOK is the modulation** (how on/off represents bits), **EV1527 is the encoding protocol** (how 24 bits become an on/off sequence), **433 MHz is the band** (where the signal travels) |
-| 6 | "The module's data rate is the remote's speed" | The module's RF profile rate (e.g. 2.4–40 kbps) belongs to the module's own link; the remote's EV1527 speed is set by its own base pulse width. The two are independent |
+| 6 | "The module's data rate is the remote's speed" | The module's RF profile rate (e.g. 2.4–40 kbps) is a property of the module's own link; the remote's EV1527 speed is set by its own base pulse width. The two are independent |
 | 7 | "Two remotes produced the same Frame — something is broken" | The 20-bit address space is large but finite, so collisions are possible. They are rare but normal, and can be handled by address comparison logic |
 | 8 | "The printed frame is missing digits — data was lost" | Check for dropped leading zeros first: `0x1A2B4` and `0x01A2B4` are the same frame |
 
@@ -139,8 +139,8 @@ This also explains two phenomena you may observe:
 | Term | Explanation |
 |---|---|
 | Frame | The digital encoding of one key press; exactly 24 bits under the EV1527 protocol. In this article it means the **radio-frequency frame (RF Frame)**; data frames used for communication between the module and other devices are a different matter — see each module's protocol documentation |
-| Address code | The high 20 bits of a frame — the remote's "ID card" (C0–C19 in the official datasheet) |
-| Key data | The low 4 bits of a frame — which key was pressed (also called button code) |
+| Address code | The upper 20 bits of a frame — the remote's ID (C0–C19 in the official datasheet) |
+| Key value | The lower 4 bits of a frame — which key was pressed (also called key data or button code) |
 | SYNC / Preamble | One extra-long low level that opens every frame ("a frame starts here"). The official datasheet calls it the preamble, defined as high 1T + low 31T |
 | Base time (T) | The remote's tempo unit T; it differs between remotes, and bits are decoded by ratio (also called pulse width) |
 | OOK | On-Off Keying — modulation scheme: carrier on = 1, carrier off = 0; the simplest form of ASK |
@@ -148,7 +148,7 @@ This also explains two phenomena you may observe:
 | 433 MHz band | License-free public band; commonly used center frequency is 433.92 MHz |
 | ISM band | License-free band for industrial/scientific/medical use; 433 MHz belongs to it |
 | Fixed code | Encoding whose address is fixed at production and sent in plaintext (EV1527 belongs to this class) |
-| Burst | One key press transmits the same frame many times (repeat transmission), to fight the unreliable wireless link |
+| Burst | One key press transmits the same frame many times (repeat transmission), to compensate for the unreliable wireless link |
 | Voting filter | Window filter — within a time window, frames are grouped and counted; the majority group wins if it reaches the threshold |
 
 **Writing conventions** (consistent across all nulllab documentation): frequencies are written as "433 MHz band (center frequency 433.92 MHz)", shortened to "433 MHz" afterwards; frames are written as 6 uppercase hexadecimal digits with the `0x` prefix; "Frame" is defined on first use and used alone afterwards.
@@ -162,10 +162,10 @@ Check the product manual or the label on the remote; or open it and look at the 
 Normally no. Their address codes differ, and the receiver tells "who is talking" by comparing address codes. But on the license-free 433 MHz band, someone else's remote can in theory be heard by your module (section 2), so always compare the address code in your application logic before acting on the key value.
 
 **Q3: Can I create a Frame myself?**
-Protocol-wise, absolutely — the 20-bit address and 4-bit key value are free combinations. Use another transmitter module and encode the same way. But note this also means anyone can forge frames that look like yours (see Q4) — do not rely on fixed codes for security-sensitive applications.
+Protocol-wise, absolutely — you can pick any 20-bit address and any 4-bit key value you like. Use another transmitter module and encode the same way. But note this also means anyone can forge frames that look like yours (see Q4) — do not rely on fixed codes for security-sensitive applications.
 
 **Q4: Is this scheme secure?**
-Fixed-code protocols are plaintext and replayable: record your Frame, replay it, and it works again. For security-sensitive scenarios such as garage doors and access control, choose rolling-code schemes with anti-replay mechanisms. EV1527 as described here suits non-security remote scenarios such as light switches and toys.
+Fixed-code protocols are plaintext and replayable: record your Frame, replay it, and it works again. For security-sensitive applications such as garage doors and access control, choose rolling-code schemes with anti-replay mechanisms. EV1527 as described here suits non-security remote-control use such as light switches and toys.
 
 **Q5: Is holding a key different from tapping it?**
 Yes. A tap sends a finite burst; holding keeps transmitting continuously. For the voting filter more samples mean a more stable result, but holding also produces consecutive batches of results — your application logic should distinguish "one long press" from "multiple taps".
