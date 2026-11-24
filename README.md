@@ -6,7 +6,7 @@ English | [简体中文](README.zh-CN.md)
 
 **Frame in one sentence**: A Frame is the digital encoding of one key press on a remote control — a 24-bit binary number whose upper 20 bits identify the remote (its ID — the address code) and whose lower 4 bits say which key was pressed (the key value). It usually appears as a 6-digit hexadecimal number, such as `0xAAC1A4`. One key press sends the same frame repeatedly; the receiver module votes over the received frames and outputs a stable result.
 
-Unless stated otherwise, *Frame* below always means the radio-frequency frame (RF Frame) defined by the EV1527 protocol; the data frames used for communication between the module and other devices are a different thing — see the glossary in section 8. If you only want the answer, this is it.
+Unless stated otherwise, *Frame* below always means the 24-bit radio-frequency frame (RF Frame) defined by the EV1527 protocol. If you only want the answer, this is it.
 
 **About RFX1**: it performs the most complex parts of wireless remote reception — RF reception, SYNC search, pulse-width measurement, bit-by-bit decoding, and multi-frame voting/filtering — entirely inside the module. You do not need to care about any low-level reception details: read the Frame over I2C, get "which remote pressed which key", and start writing your application logic right away. This article explains the principles so that you know what the module has already done for you — and so you don't have to do it yourself.
 
@@ -138,7 +138,7 @@ This also explains two phenomena you may observe:
 
 | Term | Explanation |
 |---|---|
-| Frame | The digital encoding of one key press; exactly 24 bits under the EV1527 protocol. In this article it means the **radio-frequency frame (RF Frame)**; data frames used for communication between the module and other devices are a different matter — see each module's protocol documentation |
+| Frame | The digital encoding of one key press — the 24-bit radio-frequency frame (RF Frame) defined by the EV1527 protocol |
 | Address code | The upper 20 bits of a frame — the remote's ID (C0–C19 in the official datasheet) |
 | Key value | The lower 4 bits of a frame — which key was pressed (also called key data or button code) |
 | SYNC / Preamble | One extra-long low level that opens every frame ("a frame starts here"). The official datasheet calls it the preamble, defined as high 1T + low 31T |
